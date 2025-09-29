@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Josiah Z. Rondon - Resume</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #95a5a6;
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .resume-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2.5rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header-bg {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            opacity: 0.1;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="white"/><path d="M0,0 L100,100 M100,0 L0,100" stroke="white" stroke-width="2"/></svg>');
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .contact-item i {
+            font-size: 1.2rem;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 0;
+        }
+        
+        .sidebar {
+            background: var(--light);
+            padding: 2rem;
+            border-right: 1px solid #ddd;
+        }
+        
+        .content {
+            padding: 2rem;
+        }
+        
+        .section {
+            margin-bottom: 2.5rem;
+        }
+        
+        .section-title {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--secondary);
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--accent);
+        }
+        
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .skill-tag {
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .skill-tag:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .experience-item, .project-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+            transition: var(--transition);
+        }
+        
+        .experience-item:hover, .project-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .experience-item:last-child, .project-item:last-child {
+            border-bottom: none;
+        }
+        
+        .job-title, .project-title {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+        
+        .company {
+            font-weight: 500;
+            color: var(--secondary);
+        }
+        
+        .date {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin: 0.3rem 0;
+        }
+        
+        .job-description, .project-description {
+            margin-top: 0.8rem;
+        }
+        
+        .job-description ul, .project-description ul {
+            padding-left: 1.2rem;
+        }
+        
+        .job-description li, .project-description li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .education-item {
+            margin-bottom: 1rem;
+        }
+        
+        .degree {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .school {
+            font-weight: 500;
+            color: var(--secondary);
+        }
+        
+        .graduation {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .tech-highlight {
+            background: rgba(52, 152, 219, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-weight: 500;
+            color: var(--secondary);
+        }
+        
+        .interactive-skills {
+            margin-top: 2rem;
+        }
+        
+        .skill-category {
+            margin-bottom: 1.5rem;
+        }
+        
+        .skill-bar {
+            height: 8px;
+            background: #ddd;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .skill-level {
+            height: 100%;
+            background: var(--secondary);
+            border-radius: 4px;
+            width: 0;
+            transition: width 1.5s ease;
+        }
+        
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+        }
+        
+        .project-tech span {
+            background: var(--primary);
+            color: white;
+            padding: 0.3rem 0.7rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+        
+        .project-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.8rem;
+        }
+        
+        .project-link {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .project-link:hover {
+            color: var(--accent);
+        }
+        
+        .skills-chart {
+            margin-top: 2rem;
+            height: 200px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                border-right: none;
+                border-bottom: 1px solid #ddd;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+        }
+        
+        .print-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            transition: var(--transition);
+            z-index: 100;
+        }
+        
+        .print-btn:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        @media print {
+            .print-btn {
+                display: none;
+            }
+            
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .resume-container {
+                box-shadow: none;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="resume-container">
+        <header>
+            <div class="header-bg"></div>
+            <div class="header-content">
+                <h1>JOSIAH Z. RONDON</h1>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>(203)-810-0834</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>josiahrondon@gmail.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fab fa-linkedin"></i>
+                        <span>https://www.linkedin.com/in/josiah-zackaiih-rondon-57a309292/</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <aside class="sidebar">
+                <section class="section">
+                    <h2 class="section-title">EDUCATION</h2>
+                    <div class="education-item">
+                        <div class="degree">Bachelor of Arts in Computer Science</div>
+                        <div class="school">Connecticut College, New London, CT</div>
+                        <div class="graduation">Expected May 2026</div>
+                    </div>
+                </section>
+                
+                <section class="section">
+                    <h2 class="section-title">SKILLS</h2>
+                    <div class="skills-list">
+                        <div class="skill-tag">Git</div>
+                        <div class="skill-tag">GitHub</div>
+                        <div class="skill-tag">OutSystems</div>
+                        <div class="skill-tag">Azure</div>
+                        <div class="skill-tag">Scrum</div>
+                        <div class="skill-tag">Intune</div>
+                        <div class="skill-tag">Ruby</div>
+                        <div class="skill-tag">Python</div>
+                        <div class="skill-tag">Jira</div>
+                        <div class="skill-tag">Java</div>
+                        <div class="skill-tag">Adaptability</div>
+                        <div class="skill-tag">Spanish</div>
+                    </div>
+                </section>
+                
+                <section class="section interactive-skills">
+                    <h2 class="section-title">TECHNICAL PROFICIENCY</h2>
+                    <div class="skill-category">
+                        <div>Programming Languages</div>
+                        <div class="skill-bar">
+                            <div class="skill-level" data-level="85"></div>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <div>Cloud & Platforms</div>
+                        <div class="skill-bar">
+                            <div class="skill-level" data-level="80"></div>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <div>Development Tools</div>
+                        <div class="skill-bar">
+                            <div class="skill-level" data-level="90"></div>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <div>Problem Solving</div>
+                        <div class="skill-bar">
+                            <div class="skill-level" data-level="95"></div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="section">
+                    <h2 class="section-title">SKILLS CHART</h2>
+                    <div id="skills-chart" class="skills-chart"></div>
+                </section>
+            </aside>
+            
+            <main class="content">
+                <section class="section">
+                    <h2 class="section-title">WORK EXPERIENCE</h2>
+                    
+                    <div class="experience-item">
+                        <div class="job-title">Software Engineer Intern</div>
+                        <div class="company">Yale Information Technology Services</div>
+                        <div class="date">June 2025 - Present | New Haven, CT</div>
+                        <div class="job-description">
+                            <ul>
+                                <li>Contributing to customer service automation initiatives by developing a chatbot in <span class="tech-highlight">OutSystems</span> integrated with <span class="tech-highlight">AI Agent Builder</span>, aimed at enabling faster and more accurate client interactions in SharePoint.</li>
+                                <li>Maintain continuous integration and delivery speed by following <span class="tech-highlight">Agile</span> practices such as <span class="tech-highlight">Scrum</span>, using <span class="tech-highlight">Git/GitHub</span> for version control, <span class="tech-highlight">Ruby</span> for implementation, <span class="tech-highlight">Jira</span> for task management, and <span class="tech-highlight">Docker</span> for consistent build environments.</li>
+                                <li>Improved secure system access by implementing a Layer 7 <span class="tech-highlight">OAuth</span> proof-of-concept using <span class="tech-highlight">Python</span> integrated with the <span class="tech-highlight">Yale Directory</span>, paving the way for streamlined authentication processes across applications.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="experience-item">
+                        <div class="job-title">Service Desktop Support Assistant</div>
+                        <div class="company">Connecticut College IT Service Desk</div>
+                        <div class="date">September 2024 - Present | New London, CT</div>
+                        <div class="job-description">
+                            <ul>
+                                <li>Improve technical support efficiency with a diverse client base, including students, faculty and alumni, rendering both hardware and software support of <span class="tech-highlight">Windows</span> and <span class="tech-highlight">Mac</span> devices such as scripting, internet connectivity, overheating, updating mechanisms, and troubleshooting; use <span class="tech-highlight">WebHelp Desk</span> to log and track all support cases for client follow up. Resolve 90% of issues on first contact and reduce team workload.</li>
+                                <li>Enhance client communication and support continuity of unresolved cases through <span class="tech-highlight">Gmail</span>, ensuring ongoing updates and progress tracking in the <span class="tech-highlight">Web Help Desk</span> ticketing system; increase in client satisfaction from feedback in <span class="tech-highlight">Gmail</span> and Web Help Desk due to transparent and consistent communication.</li>
+                                <li>Manage college directory of all accounts affiliated for both remote and in-person clients with <span class="tech-highlight">DUO Mobile security</span> issues, and password resets for school emails. Achieved a faster response time for account issues by 25% improve secure access and downtime for account assistance.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="experience-item">
+                        <div class="job-title">Central ITS Technician Intern</div>
+                        <div class="company">Yale Information Technology Services</div>
+                        <div class="date">June 2024 - August 2024 | New Haven, CT</div>
+                        <div class="job-description">
+                            <ul>
+                                <li>Swiftly resolved a widespread service disruption caused by a <span class="tech-highlight">CrowdStrike</span> outage impacting Windows devices; collaborated with the Central ITS engineering team to access <span class="tech-highlight">BitLocker keys</span> for recovery of Windows devices under Yale's database with <span class="tech-highlight">Intune</span> and <span class="tech-highlight">Azure Remote Desktop</span>. Each client was dealt with in less than half an hour and utilized <span class="tech-highlight">ServiceNow</span> to help assign 600 tickets regarding the outage.</li>
+                                <li>Served over 60 professional clients throughout the institution with managed devices. Utilized <span class="tech-highlight">Azure, ServiceNow, and Intune</span> for backend device management while effectively communicating with clients using applications such as <span class="tech-highlight">Outlook, Teams, and ServiceNow</span> to ensure 100% satisfaction and resolution.</li>
+                                <li>Supported institutional hardware provisioning needs across multiple departments; provisioned over 100 <span class="tech-highlight">Windows</span> and <span class="tech-highlight">Mac</span> laptops and desktops, configuring them for optimal performance and secure integration into the institution's network environment.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="section">
+                    <h2 class="section-title">PROJECTS</h2>
+                    
+                    <div class="project-item">
+                        <div class="project-title">Genomic Structural Variation Analysis Research</div>
+                        <div class="date">Jan 2025 - Present | Connecticut College</div>
+                        <div class="project-description">
+                            <ul>
+                                <li>Developing an ensemble method that integrates multiple structural variation callers and sequencing platforms to generate unified, high-confidence genomic variants</li>
+                                <li>Created a novel algorithm to quantify microhomology patterns at SV breakpoints, providing insight into mutational mechanisms and DNA repair pathways</li>
+                                <li>Building a parallel processing pipeline to handle large-scale genomic datasets (1000 Genomes Phase 4) and implementing semi-supervised machine learning models</li>
+                                <li>Processing VCF files to identify patterns characteristic of MMEJ DNA repair mechanism through microhomology analysis and k-mer detection</li>
+                            </ul>
+                        </div>
+                        <div class="project-tech">
+                            <span>Python</span>
+                            <span>Bioinformatics</span>
+                            <span>Machine Learning</span>
+                            <span>VCF Processing</span>
+                            <span>Parallel Computing</span>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+    
+    <button class="print-btn" onclick="window.print()">
+        <i class="fas fa-print"></i> Print Resume
+    </button>
+
+    <script>
+        // Animate skill bars when they come into view
+        document.addEventListener('DOMContentLoaded', function() {
+            const skillLevels = document.querySelectorAll('.skill-level');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const level = entry.target.getAttribute('data-level');
+                        entry.target.style.width = level + '%';
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            skillLevels.forEach(skill => {
+                observer.observe(skill);
+            });
+            
+            // Create skills chart with D3.js
+            createSkillsChart();
+            
+            // Add hover effect to experience and project items
+            const experienceItems = document.querySelectorAll('.experience-item, .project-item');
+            experienceItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateX(5px)';
+                    this.style.transition = 'transform 0.3s ease';
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateX(0)';
+                });
+            });
+        });
+        
+        function createSkillsChart() {
+            const skillsData = [
+                { skill: 'Python', level: 85 },
+                { skill: 'Java', level: 75 },
+                { skill: 'Ruby', level: 70 },
+                { skill: 'JavaScript', level: 80 },
+                { skill: 'Git/GitHub', level: 90 },
+                { skill: 'Azure', level: 75 },
+                { skill: 'OutSystems', level: 70 }
+            ];
+            
+            const margin = { top: 20, right: 20, bottom: 40, left: 100 };
+            const width = 300 - margin.left - margin.right;
+            const height = 200 - margin.top - margin.bottom;
+            
+            const svg = d3.select("#skills-chart")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", `translate(${margin.left},${margin.top})`);
+            
+            const x = d3.scaleLinear()
+                .domain([0, 100])
+                .range([0, width]);
+            
+            const y = d3.scaleBand()
+                .domain(skillsData.map(d => d.skill))
+                .range([0, height])
+                .padding(0.1);
+            
+            svg.append("g")
+                .attr("transform", `translate(0,${height})`)
+                .call(d3.axisBottom(x).ticks(5).tickFormat(d => d + "%"))
+                .selectAll("text")
+                .style("font-size", "10px");
+            
+            svg.append("g")
+                .call(d3.axisLeft(y))
+                .selectAll("text")
+                .style("font-size", "10px");
+            
+            svg.selectAll(".bar")
+                .data(skillsData)
+                .enter()
+                .append("rect")
+                .attr("class", "bar")
+                .attr("y", d => y(d.skill))
+                .attr("height", y.bandwidth())
+                .attr("x", 0)
+                .attr("width", 0)
+                .attr("fill", "#3498db")
+                .transition()
+                .duration(1000)
+                .delay((d, i) => i * 100)
+                .attr("width", d => x(d.level));
+            
+            svg.selectAll(".label")
+                .data(skillsData)
+                .enter()
+                .append("text")
+                .attr("class", "label")
+                .attr("x", d => x(d.level) + 5)
+                .attr("y", d => y(d.skill) + y.bandwidth() / 2)
+                .attr("dy", ".35em")
+                .text(d => d.level + "%")
+                .style("font-size", "10px")
+                .style("fill", "#2c3e50");
+        }
+    </script>
+</body>
+</html>
